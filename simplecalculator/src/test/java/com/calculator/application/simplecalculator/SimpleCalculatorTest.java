@@ -43,6 +43,5 @@ public class SimpleCalculatorTest
         assertEquals( subtractionOperation.subtract(a, b), 5.0, 0.001);
         assertEquals( multiplicationOperation.multiple(a, b), 50.0, 0.001);
         assertEquals( divisionOperation.divide(a, b), 2.0, 0.001);
-
     }
 }
