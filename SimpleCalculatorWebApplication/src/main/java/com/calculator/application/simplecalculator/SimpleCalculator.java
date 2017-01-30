@@ -1,5 +1,6 @@
 package com.calculator.application.simplecalculator;
 
+import java.applet.*;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -8,388 +9,146 @@ import com.calculator.application.modules.MultiplicationModule.MultiplicationOpe
 import com.calculator.application.modules.additionModule.AdditionOperation;
 import com.subtraction.operation.SubtractionOperation;
 
-/*********************************************/
+public class SimpleCalculator extends Applet implements ActionListener
 
-public class SimpleCalculator extends Frame {
+{
 	private static final long serialVersionUID = 1L;
-	public boolean setClear = true;
-	double number, memValue;
-	char op;
 
-	String digitButtonText[] = { "7", "8", "9", "4", "5", "6", "1", "2", "3",
-			"0", "+/-", "." };
-	String operatorButtonText[] = { "/", "sqrt", "*", "%", "-", "1/X", "+", "=" };
-	String memoryButtonText[] = { "MC", "MR", "MS", "M+" };
-	String specialButtonText[] = { "Backspc", "C", "CE" };
+	String cmd[] = { "+", "-", "*", "/", "=", "C" };
 
-	MyDigitButton digitButton[] = new MyDigitButton[digitButtonText.length];
-	MyOperatorButton operatorButton[] = new MyOperatorButton[operatorButtonText.length];
-	MyMemoryButton memoryButton[] = new MyMemoryButton[memoryButtonText.length];
-	MySpecialButton specialButton[] = new MySpecialButton[specialButtonText.length];
+	double pv = 0;
 
-	Label displayLabel = new Label("0", Label.RIGHT);
-	Label memLabel = new Label(" ", Label.RIGHT);
+	String op = "";
 
-	final int FRAME_WIDTH = 325, FRAME_HEIGHT = 325;
-	final int HEIGHT = 30, WIDTH = 30, H_SPACE = 10, V_SPACE = 10;
-	final int TOPX = 30, TOPY = 50;
-	
-	// /////////////////////////
-	SimpleCalculator(String frameText)// constructor
-	{
-		super(frameText);
+	Button b[] = new Button[16];
 
-		int tempX = TOPX, y = TOPY;
-		displayLabel.setBounds(tempX, y, 240, HEIGHT);
-		displayLabel.setBackground(Color.YELLOW);
-		displayLabel.setForeground(Color.BLACK);
-		add(displayLabel);
+	TextField t1 = new TextField(10);
 
-		memLabel.setBounds(TOPX, TOPY + HEIGHT + V_SPACE, WIDTH, HEIGHT);
-		add(memLabel);
-
-		// set Co-ordinates for Memory Buttons
-		tempX = TOPX;
-		y = TOPY + 2 * (HEIGHT + V_SPACE);
-		for (int i = 0; i < memoryButton.length; i++) {
-			memoryButton[i] = new MyMemoryButton(tempX, y, WIDTH, HEIGHT,
-					memoryButtonText[i], this);
-			memoryButton[i].setForeground(Color.RED);
-			y += HEIGHT + V_SPACE;
-		}
-
-		// set Co-ordinates for Special Buttons
-		tempX = TOPX + 1 * (WIDTH + H_SPACE);
-		y = TOPY + 1 * (HEIGHT + V_SPACE);
-		for (int i = 0; i < specialButton.length; i++) {
-			specialButton[i] = new MySpecialButton(tempX, y, WIDTH * 2, HEIGHT,
-					specialButtonText[i], this);
-			specialButton[i].setForeground(Color.RED);
-			tempX = tempX + 2 * WIDTH + H_SPACE;
-		}
-
-		// set Co-ordinates for Digit Buttons
-		int digitX = TOPX + WIDTH + H_SPACE;
-		int digitY = TOPY + 2 * (HEIGHT + V_SPACE);
-		tempX = digitX;
-		y = digitY;
-		for (int i = 0; i < digitButton.length; i++) {
-			digitButton[i] = new MyDigitButton(tempX, y, WIDTH, HEIGHT,
-					digitButtonText[i], this);
-			digitButton[i].setForeground(Color.BLUE);
-			tempX += WIDTH + H_SPACE;
-			if ((i + 1) % 3 == 0) {
-				tempX = digitX;
-				y += HEIGHT + V_SPACE;
-			}
-		}
-
-		// set Co-ordinates for Operator Buttons
-		int opsX = digitX + 2 * (WIDTH + H_SPACE) + H_SPACE;
-		int opsY = digitY;
-		tempX = opsX;
-		y = opsY;
-		for (int i = 0; i < operatorButton.length; i++) {
-			tempX += WIDTH + H_SPACE;
-			operatorButton[i] = new MyOperatorButton(tempX, y, WIDTH, HEIGHT,
-					operatorButtonText[i], this);
-			operatorButton[i].setForeground(Color.RED);
-			if ((i + 1) % 2 == 0) {
-				tempX = opsX;
-				y += HEIGHT + V_SPACE;
-			}
-		}
-
-		addWindowListener(new WindowAdapter() {
-			public void windowClosing(WindowEvent ev) {
-				System.exit(0);
-			}
-		});
-		
-		setLayout(null);
-		setSize(FRAME_WIDTH, FRAME_HEIGHT);
-		setVisible(true);
-	}
-
-	// ////////////////////////////////
-	static String getFormattedText(double temp) {
-		String resText = "" + temp;
-		if (resText.lastIndexOf(".0") > 0)
-			resText = resText.substring(0, resText.length() - 2);
-		return resText;
-	}
-
-	// //////////////////////////////////////
-	public static void main(String[] args) {
-		new SimpleCalculator("Calculator - JavaTpoint");
-	}
-}
-
-/*******************************************/
-
-class MyDigitButton extends Button implements ActionListener {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	SimpleCalculator cl;
-	
-	// ////////////////////////////////////////
-	MyDigitButton(int x, int y, int width, int height, String cap,
-			SimpleCalculator clc) {
-		super(cap);
-		setBounds(x, y, width, height);
-		this.cl = clc;
-		this.cl.add(this);
-		addActionListener(this);
-	}
-
-	// //////////////////////////////////////////////
-	static boolean isInString(String s, char ch) {
-		for (int i = 0; i < s.length(); i++)
-			if (s.charAt(i) == ch)
-				return true;
-		return false;
-	}
-
-	// ///////////////////////////////////////////////
-	public void actionPerformed(ActionEvent ev) {
-		String tempText = ((MyDigitButton) ev.getSource()).getLabel();
-
-		if (tempText.equals(".")) {
-			if (cl.setClear) {
-				cl.displayLabel.setText("0.");
-				cl.setClear = false;
-			} else if (!isInString(cl.displayLabel.getText(), '.'))
-				cl.displayLabel.setText(cl.displayLabel.getText() + ".");
-			return;
-		}
-
-		int index = 0;
-		try {
-			index = Integer.parseInt(tempText);
-		} catch (NumberFormatException e) {
-			return;
-		}
-
-		if (index == 0 && cl.displayLabel.getText().equals("0"))
-			return;
-
-		if (cl.setClear) {
-			cl.displayLabel.setText("" + index);
-			cl.setClear = false;
-		} else
-			cl.displayLabel.setText(cl.displayLabel.getText() + index);
-	}// actionPerformed
-}// class defination
-
-/********************************************/
-
-class MyOperatorButton extends Button implements ActionListener {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	SimpleCalculator cl;
-	
 	// Operational Modules
 	AdditionOperation additionOperation;
 	SubtractionOperation subtractionOperation;
 	MultiplicationOperation multiplicationOperation;
 	DivisionOperation divisionOperation;
 
-	MyOperatorButton(int x, int y, int width, int height, String cap,
-			SimpleCalculator clc) {
-		super(cap);
-		setBounds(x, y, width, height);
-		this.cl = clc;
-		this.cl.add(this);
-		addActionListener(this);
-		
-		//Initialize the calculator operational Modules
+	public void init()
+
+	{
+		// Initialize the calculator operational Modules
 		additionOperation = new AdditionOperation();
 		subtractionOperation = new SubtractionOperation();
 		multiplicationOperation = new MultiplicationOperation();
 		divisionOperation = new DivisionOperation();
-	}
 
-	// /////////////////////
-	public void actionPerformed(ActionEvent ev) {
-		String opText = ((MyOperatorButton) ev.getSource()).getLabel();
+		setLayout(new BorderLayout());
 
-		cl.setClear = true;
-		double temp = Double.parseDouble(cl.displayLabel.getText());
+		add(t1, "North");
 
-		if (opText.equals("1/x")) {
-			try {
-				double tempd = 1 / (double) temp;
-				cl.displayLabel.setText(SimpleCalculator
-						.getFormattedText(tempd));
-			} catch (ArithmeticException excp) {
-				cl.displayLabel.setText("Divide by 0.");
-			}
-			return;
-		}
-		if (opText.equals("sqrt")) {
-			try {
-				double tempd = Math.sqrt(temp);
-				cl.displayLabel.setText(SimpleCalculator
-						.getFormattedText(tempd));
-			} catch (ArithmeticException excp) {
-				cl.displayLabel.setText("Divide by 0.");
-			}
-			return;
-		}
-		if (!opText.equals("=")) {
-			cl.number = temp;
-			cl.op = opText.charAt(0);
-			return;
-		}
-		// process = button pressed
-		switch (cl.op) {
-		case '+':
-			temp = additionOperation.addition(temp, cl.number);
-//			temp += cl.number;
-			break;
-		case '-':
-			temp = subtractionOperation.subtract(temp, cl.number);
-//			temp = cl.number - temp;
-			break;
-		case '*':
-			temp = multiplicationOperation.multiple(temp, cl.number);
-//			temp *= cl.number;
-			break;
-		case '%':
-			try {
-				temp = cl.number % temp;
-			} catch (ArithmeticException excp) {
-				cl.displayLabel.setText("Divide by 0.");
-				return;
-			}
-			break;
-		case '/':
-			try {
-				temp = divisionOperation.divide(temp, cl.number);
-//				temp = cl.number / temp;
-			} catch (ArithmeticException excp) {
-				cl.displayLabel.setText("Divide by 0.");
-				return;
-			}
-			break;
-		}// switch
+		t1.setText("0");
 
-		cl.displayLabel.setText(SimpleCalculator.getFormattedText(temp));
-		// cl.number=temp;
-	}// actionPerformed
-}// class
+		Panel p = new Panel();
 
-/****************************************/
+		p.setLayout(new GridLayout(4, 4));
 
-class MyMemoryButton extends Button implements ActionListener {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	SimpleCalculator cl;
+		for (int i = 0; i < 16; i++)
 
-	// ///////////////////////////////
-	MyMemoryButton(int x, int y, int width, int height, String cap,
-			SimpleCalculator clc) {
-		super(cap);
-		setBounds(x, y, width, height);
-		this.cl = clc;
-		this.cl.add(this);
-		addActionListener(this);
-	}
+		{
 
-	// //////////////////////////////////////////////
-	public void actionPerformed(ActionEvent ev) {
-		char memop = ((MyMemoryButton) ev.getSource()).getLabel().charAt(1);
+			if (i < 10)
 
-		cl.setClear = true;
-		@SuppressWarnings("unused")
-		double temp = Double.parseDouble(cl.displayLabel.getText());
+				b[i] = new Button(String.valueOf(i));
 
-		switch (memop) {
-		case 'C':
-			cl.memLabel.setText(" ");
-			cl.memValue = 0.0;
-			break;
-		case 'R':
-			cl.displayLabel.setText(SimpleCalculator
-					.getFormattedText(cl.memValue));
-			break;
-		case 'S':
-			cl.memValue = 0.0;
-		case '+':
-			cl.memValue += Double.parseDouble(cl.displayLabel.getText());
-			if (cl.displayLabel.getText().equals("0")
-					|| cl.displayLabel.getText().equals("0.0"))
-				cl.memLabel.setText(" ");
 			else
-				cl.memLabel.setText("M");
-			break;
-		}// switch
-	}// actionPerformed
-}// class
 
-/*****************************************/
+				b[i] = new Button(cmd[i % 10]);
 
-class MySpecialButton extends Button implements ActionListener {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	SimpleCalculator cl;
+			b[i].setFont(new Font("Arial", Font.BOLD, 25));
 
-	MySpecialButton(int x, int y, int width, int height, String cap,
-			SimpleCalculator clc) {
-		super(cap);
-		setBounds(x, y, width, height);
-		this.cl = clc;
-		this.cl.add(this);
-		addActionListener(this);
-	}
+			p.add(b[i]);
 
-	// ////////////////////
-	static String backSpace(String s) {
-		String Res = "";
-		for (int i = 0; i < s.length() - 1; i++)
-			Res += s.charAt(i);
-		return Res;
-	}
+			add(p, "Center");
 
-	// ////////////////////////////////////////////////////////
-	public void actionPerformed(ActionEvent ev) {
-		String opText = ((MySpecialButton) ev.getSource()).getLabel();
-		// check for backspace button
-		if (opText.equals("Backspc")) {
-			String tempText = backSpace(cl.displayLabel.getText());
-			if (tempText.equals(""))
-				cl.displayLabel.setText("0");
-			else
-				cl.displayLabel.setText(tempText);
-			return;
-		}
-		// check for "C" button i.e. Reset
-		if (opText.equals("C")) {
-			cl.number = 0.0;
-			cl.op = ' ';
-			cl.memValue = 0.0;
-			cl.memLabel.setText(" ");
+			b[i].addActionListener(this);
+
 		}
 
-		// it must be CE button pressed
-		cl.displayLabel.setText("0");
-		cl.setClear = true;
-	}// actionPerformed
-}// class
+	}
 
-/*********************************************
- * Features not implemented and few bugs
- * 
- * i) No coding done for "+/-" button. ii) Menubar is not included. iii)Not for
- * Scientific calculation iv)Some of the computation may lead to unexpected
- * result due to the representation of Floating point numbers in computer is an
- * approximation to the given value that can be stored physically in memory.
- ***********************************************/
+	public void actionPerformed(ActionEvent ae)
+
+	{
+
+		double res = 0;
+
+		String cap = ae.getActionCommand();
+
+		double cv = Double.parseDouble(t1.getText());
+
+		if (cap.equals("C"))
+
+		{
+
+			t1.setText("0");
+
+			pv = 0;
+
+			cv = 0;
+
+			res = 0;
+
+			op = "";
+
+		}
+
+		else if (cap.equals("="))
+
+		{
+
+			res = 0;
+
+			if (op == "+")
+
+				res = additionOperation.addition(pv, cv);
+
+			else if (op == "-")
+
+				res = subtractionOperation.subtract(pv, cv);
+
+			else if (op == "*")
+
+				res = multiplicationOperation.multiple(pv, cv);
+
+			else if (op == "/")
+
+				res = divisionOperation.divide(pv, cv);
+
+			t1.setText(String.valueOf(res));
+
+		}
+
+		else if (cap.equals("+") || cap.equals("-") ||
+
+				cap.equals("*") || cap.equals("/"))
+
+		{
+
+			pv = cv;
+
+			op = cap;
+
+			t1.setText("0");
+
+		}
+
+		else
+
+		{
+
+			double v = cv * 10 + Integer.parseInt(cap);
+
+			t1.setText(String.valueOf(v));
+
+		}
+
+	}
+
+}
