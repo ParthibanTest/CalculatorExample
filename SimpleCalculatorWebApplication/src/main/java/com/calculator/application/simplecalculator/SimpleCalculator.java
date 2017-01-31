@@ -111,7 +111,7 @@ public class SimpleCalculator extends Applet implements ActionListener
 
 			else if (op == "-")
 
-				res = subtractionOperation.subtract(pv, cv);
+				res = subtractionOperation.subtract(cv, pv);
 
 			else if (op == "*")
 
@@ -119,7 +119,7 @@ public class SimpleCalculator extends Applet implements ActionListener
 
 			else if (op == "/")
 
-				res = divisionOperation.divide(pv, cv);
+				res = divisionOperation.divide(cv, pv);
 
 			t1.setText(String.valueOf(res));
 
