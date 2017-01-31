@@ -44,7 +44,7 @@
 				</executions>
 				<configuration>
 					<serverId>nexus</serverId>
-					<nexusUrl>http://35.154.145.196:8070/nexus/</nexusUrl>
+					<nexusUrl>http://localhost:8070/nexus/</nexusUrl>
 					<skipStaging>true</skipStaging>
 				</configuration>
 			</plugin>
@@ -114,7 +114,7 @@
 	<distributionManagement>
 		<snapshotRepository>
 			<id>nexus-snapshots</id>
-			<url>http://35.154.145.196:8070/nexus/content/repositories/snapshots/</url>
+			<url>http://localhost:8070/nexus/content/repositories/snapshots/</url>
 		</snapshotRepository>
 	</distributionManagement>
 
