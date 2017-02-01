@@ -15,6 +15,7 @@ public class SimpleCalculatorTest
 	// Mock Data
 	double a=5;
 	double b=10;
+	double c=20;
 	
 	// Operational Modules
 		AdditionOperation additionOperation;
@@ -39,9 +40,8 @@ public class SimpleCalculatorTest
     @Test
     public void testApp()
     {
-        assertEquals( additionOperation.addition(a, b), 15.0, 0.001);
-        assertEquals( subtractionOperation.subtract(a, b), 5.0, 0.001);
-        assertEquals( multiplicationOperation.multiple(a, b), 50.0, 0.001);
+    	double result = additionOperation.addition(subtractionOperation.subtract(b, c), multiplicationOperation.multiple(a, b));
+        assertEquals( result, 60.0, 0.001);
         assertEquals( divisionOperation.divide(a, b), 2.0, 0.001);
     }
 }
