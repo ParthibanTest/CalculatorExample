@@ -94,11 +94,11 @@
 			<name>Releases</name>
 			<url>http://ec2-35-154-200-222.ap-south-1.compute.amazonaws.com:8070/repository/maven-releases/</url>
 		</repository>
-		<snapshotRepository>
+		<!-- <snapshotRepository>
 			<id>nexus</id>
 			<name>Snapshot</name>
 			<url>http://ec2-35-154-200-222.ap-south-1.compute.amazonaws.com:8070/repository/maven-snapshots/</url>
-		</snapshotRepository>
+		</snapshotRepository> -->
 	</distributionManagement>
 
 	<dependencies>
