@@ -3,7 +3,7 @@
 
 	<groupId>com.calculator.application.modules</groupId>
 	<artifactId>AdditionModule</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.3</version>
 	<packaging>jar</packaging>
 
 	<name>AdditionModule</name>
@@ -14,10 +14,10 @@
 	</properties>
 
 	<scm>
-		<connection>scm:git:https://github.com/ParthibanTest/CalculatorExample.git</connection>
-		<url>https://github.com/ParthibanTest/CalculatorExample.git</url>
-		<developerConnection>scm:git:https://github.com/ParthibanTest/CalculatorExample.git</developerConnection>
-	  <tag>v0.0.1</tag>
+		<connection>scm:git:https://ParthibanTest@github.com/ParthibanTest/CalculatorExample.git</connection>
+		<url>https://ParthibanTest@github.com/ParthibanTest/CalculatorExample.git</url>
+		<developerConnection>scm:git:https://ParthibanTest@github.com/ParthibanTest/CalculatorExample.git</developerConnection>
+	  <tag>v1.0.3</tag>
   </scm>
 
 	<build>
@@ -62,6 +62,7 @@
 					<tagNameFormat>v@{project.version}</tagNameFormat>
 					<autoVersionSubmodules>true</autoVersionSubmodules>
 					<releaseProfiles>releases</releaseProfiles>
+					<updateOnlySnapshots>false</updateOnlySnapshots>
 				</configuration>
 			</plugin>
 
